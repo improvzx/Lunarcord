@@ -1,0 +1,33 @@
+{
+  "name": "lunarcord",
+  "version": "2.0.0",
+  "description": "Aplicativo simples de chamadas, vídeo, tela e chat",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "server": "node server/index.js",
+    "app": "electron .",
+    "build:win": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.5",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "electron": "^37.2.6",
+    "electron-builder": "^26.0.12",
+    "wait-on": "^8.0.4"
+  },
+  "build": {
+    "appId": "com.lunarcord.app",
+    "productName": "Lunarcord",
+    "files": ["electron/**/*", "client/**/*", "server/**/*", "assets/**/*", "package.json"],
+    "win": { "target": "nsis", "icon": "assets/icon.png" },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true }
+  }
+}

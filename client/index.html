@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lunarcord</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="settings.css" />
+  <link rel="stylesheet" href="social.css" />
+  <link rel="stylesheet" href="roles.css" />
+</head>
+<body>
+  <section id="auth" class="login-wrap">
+    <div class="login-card auth-card">
+      <div class="brand-mark moon-logo">☾</div><h1>Lunarcord</h1><p>Entre na sua conta</p>
+      <form id="login-form"><label>E-mail<input id="login-email" type="email" required /></label><label>Senha<input id="login-password" type="password" required /></label><button class="primary">Entrar</button></form>
+      <form id="register-form" class="hidden"><label>Nome de usuário<input id="register-name" maxlength="24" required /></label><label>E-mail<input id="register-email" type="email" required /></label><label>Senha<input id="register-password" type="password" minlength="8" required /></label><button class="primary">Criar conta</button></form>
+      <form id="verify-form" class="hidden"><label>Código de 6 números<input id="verify-code" inputmode="numeric" maxlength="6" required /></label><button class="primary">Verificar e entrar</button></form>
+      <p id="auth-message" class="form-message"></p><button id="switch-auth" class="secondary">Criar uma conta</button>
+    </div>
+  </section>
+  <section id="login" class="login-wrap hidden">
+    <form id="join-form" class="login-card">
+      <div class="brand-mark moon-logo">☾</div>
+      <h1>Lunarcord</h1><p>Converse, compartilhe e jogue com seus amigos.</p>
+      <label>Seu nome<input id="name" maxlength="24" placeholder="Como vão te chamar?" required /></label>
+      <label>Código da sala<input id="room" maxlength="40" placeholder="Ex.: minha-sala" required /></label>
+      <button type="submit" class="primary">Entrar na sala</button>
+      <button type="button" id="random-room" class="secondary">Criar código aleatório</button>
+      <small>Para testar sozinho, abra o app duas vezes e use o mesmo código.</small>
+    </form>
+  </section>
+
+  <main id="app" class="hidden">
+    <aside class="sidebar">
+      <div class="server-icon moon-logo">☾</div>
+      <div class="channel-head"><b>Lunarcord</b><span id="room-label"></span></div>
+      <div class="channel active"># chamada-geral</div>
+      <div class="people-title">NA SALA</div><div id="people"></div>
+      <div class="profile"><span class="avatar" id="avatar">U</span><div><b id="my-name"></b><small>Conectado</small></div></div>
+    </aside>
+
+    <section class="stage">
+      <header><div><h2># chamada-geral</h2><p id="status">Preparando dispositivos...</p></div><div class="header-actions"><button id="community">👥 Amigos e servidores</button><button id="settings">⚙ Configurações</button><button id="copy-room">Copiar código</button></div></header>
+      <div id="videos" class="videos"><div class="video-card local"><video id="local-video" autoplay muted playsinline></video><span>Você</span></div></div>
+      <div class="controls">
+        <button id="mic" title="Microfone">🎙️</button><button id="cam" title="Câmera">📷</button>
+        <button id="screen" title="Compartilhar tela">🖥️</button><button id="leave" class="danger" title="Sair">📞</button>
+      </div>
+    </section>
+
+    <aside class="chat"><header><h3>Chat da sala</h3></header><div id="messages"></div>
+      <form id="chat-form"><input id="message" autocomplete="off" placeholder="Mensagem..." maxlength="1000" /><button>➤</button></form>
+    </aside>
+  </main>
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head"><div><h2>Configurações</h2><p>Escolha os dispositivos usados na chamada</p></div><button id="close-settings">✕</button></div>
+      <label>🎙️ Microfone<select id="audio-input"></select></label>
+      <label>🔊 Saída de som<select id="audio-output"></select><small id="output-hint"></small></label>
+      <label>📷 Câmera<select id="video-input"></select></label>
+      <label>🖥️ Tela ou janela para transmitir<select id="capture-source"></select></label>
+      <button id="apply-settings" class="primary">Aplicar configurações</button>
+    </div>
+  </div>
+  <div id="community-modal" class="modal hidden"><div class="modal-card community-card">
+    <div class="modal-head"><div><h2>Amigos e servidores</h2><p id="account-label"></p></div><button id="close-community">✕</button></div>
+    <div class="social-grid"><section><h3>Amigos</h3><form id="friend-form"><input id="friend-email" type="email" placeholder="E-mail do amigo" required /><button>Adicionar</button></form><div id="friend-requests"></div><div id="friends-list"></div></section>
+    <section><h3>Servidores</h3><form id="server-form"><input id="server-name" placeholder="Nome do servidor" required /><button>Criar</button></form><form id="join-server-form"><input id="invite-code" placeholder="Código de convite" required /><button>Entrar</button></form><div id="servers-list"></div></section></div>
+    <div id="role-panel" class="role-panel hidden"><h3>Criar cargo no servidor selecionado</h3><input id="role-name" placeholder="Nome do cargo" /><div class="permissions"><label><input type="checkbox" value="SEND_MESSAGES" checked /> Mensagens</label><label><input type="checkbox" value="CONNECT" checked /> Entrar em call</label><label><input type="checkbox" value="SPEAK" checked /> Falar</label><label><input type="checkbox" value="VIDEO" checked /> Câmera</label><label><input type="checkbox" value="SHARE_SCREEN" /> Compartilhar tela</label><label><input type="checkbox" value="MANAGE_ROLES" /> Gerenciar cargos</label></div><button id="create-role" class="primary">Criar cargo</button><h3>Atribuir cargo</h3><div class="assign-role"><select id="role-member"></select><select id="role-choice"></select><button id="assign-role">Aplicar</button></div></div>
+    <p id="social-message" class="form-message"></p><button id="logout" class="secondary logout">Sair da conta</button>
+  </div></div>
+  <script src="../node_modules/socket.io-client/dist/socket.io.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
