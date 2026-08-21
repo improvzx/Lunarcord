@@ -1,5 +1,6 @@
 const $ = s => document.querySelector(s);
-const socket = io('http://localhost:3000');
+const SERVER_URL = window.LUNARCORD_SERVER_URL || 'http://localhost:3000';
+const socket = io(SERVER_URL);
 const peers = new Map();
 const names = new Map();
 let localStream, roomId, myName, screenStream;
@@ -165,7 +166,7 @@ function renegotiate(pc, id) { pc.createOffer().then(offer=>pc.setLocalDescripti
 
 let authToken=localStorage.getItem('lunarcordToken')||'', account=null, verificationEmail='', selectedServer=null;
 async function api(route, options={}) {
-  const response=await fetch(`http://localhost:3000/api${route}`,{...options,headers:{'Content-Type':'application/json',...(authToken?{Authorization:`Bearer ${authToken}`}:{})}});
+  const response=await fetch(`${SERVER_URL}/api${route}`,{...options,headers:{'Content-Type':'application/json',...(authToken?{Authorization:`Bearer ${authToken}`}:{})}});
   const data=await response.json(); if(!response.ok) throw new Error(data.error||'Não foi possível concluir.'); return data;
 }
 function enterAccount(data){ authToken=data.token;account=data.user;localStorage.setItem('lunarcordToken',authToken);$('#auth').classList.add('hidden');$('#login').classList.remove('hidden');$('#name').value=account.username;$('#account-label').textContent=`${account.username} • ${account.email}`; }

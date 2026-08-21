@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const http = require('http');
 const path = require('path');
 const { Server } = require('socket.io');
@@ -9,6 +10,7 @@ const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 const clientPath = path.join(__dirname, '..', 'client');
 
+app.use(cors());
 app.use(express.json({ limit: '256kb' }));
 app.use('/api', social);
 app.use(express.static(clientPath));

@@ -18,7 +18,6 @@ function createWindow() {
 
 app.whenReady().then(() => {
   process.env.LUNARCORD_DATA_DIR = path.join(app.getPath('userData'), 'server-data');
-  require('../server/index.js');
   ipcMain.handle('capture-sources', async () => {
     const sources = await desktopCapturer.getSources({ types: ['screen', 'window'], thumbnailSize: { width: 0, height: 0 } });
     return sources.map(source => ({ id: source.id, name: source.name }));

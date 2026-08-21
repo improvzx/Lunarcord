@@ -30,3 +30,7 @@ O arquivo `client/app.js` está configurado para o servidor local em `http://loc
 ## Limitação desta primeira versão
 
 O app usa conexão WebRTC direta e é mais indicado para salas pequenas. O servidor apenas coordena a entrada e o chat; ele não grava as chamadas.
+
+## Publicação
+
+O arquivo `render.yaml` cria o servidor web e um PostgreSQL gratuito no Render. Depois que o Render fornecer a URL HTTPS, coloque-a em `client/config.js` e execute `npm run build:win` para gerar o instalador conectado ao servidor público.

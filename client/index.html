@@ -70,6 +70,7 @@
     <div id="role-panel" class="role-panel hidden"><h3>Criar cargo no servidor selecionado</h3><input id="role-name" placeholder="Nome do cargo" /><div class="permissions"><label><input type="checkbox" value="SEND_MESSAGES" checked /> Mensagens</label><label><input type="checkbox" value="CONNECT" checked /> Entrar em call</label><label><input type="checkbox" value="SPEAK" checked /> Falar</label><label><input type="checkbox" value="VIDEO" checked /> Câmera</label><label><input type="checkbox" value="SHARE_SCREEN" /> Compartilhar tela</label><label><input type="checkbox" value="MANAGE_ROLES" /> Gerenciar cargos</label></div><button id="create-role" class="primary">Criar cargo</button><h3>Atribuir cargo</h3><div class="assign-role"><select id="role-member"></select><select id="role-choice"></select><button id="assign-role">Aplicar</button></div></div>
     <p id="social-message" class="form-message"></p><button id="logout" class="secondary logout">Sair da conta</button>
   </div></div>
+  <script src="config.js"></script>
   <script src="../node_modules/socket.io-client/dist/socket.io.min.js"></script>
   <script src="app.js"></script>
 </body>
