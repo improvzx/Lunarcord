@@ -60,6 +60,14 @@ router.post('/verify', async (req, res) => {
   user.verified=true; delete user.verificationCode; delete user.codeExpires; await writeDb(db); res.json({ token: tokenFor(user), user: publicUser(user) });
 });
 
+router.post('/resend-code', async (req, res) => {
+  const email=String(req.body.email||'').trim().toLowerCase(), db=await readDb(), user=db.users.find(u=>u.email===email);
+  if(!user)return res.status(404).json({error:'Conta não encontrada.'});
+  if(user.verified)return res.status(400).json({error:'Esta conta já foi verificada.'});
+  const code=String(Math.floor(100000+Math.random()*900000)); user.verificationCode=code; user.codeExpires=Date.now()+15*60_000; await writeDb(db);
+  const sent=await sendCode(email,code).catch(()=>false); res.json({ok:true,emailSent:sent,developmentCode:sent?undefined:code});
+});
+
 router.post('/login', async (req, res) => {
   const db=await readDb(), user=db.users.find(u=>u.email===String(req.body.email||'').toLowerCase());
   if (!user || !await bcrypt.compare(String(req.body.password||''), user.passwordHash)) return res.status(401).json({ error:'E-mail ou senha incorretos.' });

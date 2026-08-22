@@ -1,6 +1,6 @@
 {
   "name": "lunarcord",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Aplicativo simples de chamadas, vídeo, tela e chat",
   "main": "electron/main.js",
   "scripts": {
