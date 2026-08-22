@@ -35,6 +35,22 @@ function auth(req, res, next) {
   catch { res.status(401).json({ error: 'Faça login novamente.' }); }
 }
 async function sendCode(email, code) {
+  const { BREVO_API_KEY, BREVO_SENDER_EMAIL } = process.env;
+  if (BREVO_API_KEY && BREVO_SENDER_EMAIL) {
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'api-key': BREVO_API_KEY, accept: 'application/json' },
+      body: JSON.stringify({
+        sender: { name: 'Lunarcord', email: BREVO_SENDER_EMAIL },
+        to: [{ email }],
+        subject: 'Código de verificação do Lunarcord',
+        htmlContent: `<div style="font-family:Arial;background:#171923;color:#fff;padding:28px;border-radius:14px"><h2 style="color:#7567ff">Lunarcord</h2><p>Seu código de verificação é:</p><div style="font-size:32px;font-weight:bold;letter-spacing:8px">${code}</div><p style="color:#aaa">O código expira em 15 minutos.</p></div>`,
+        textContent: `Seu código de verificação do Lunarcord é ${code}. Ele expira em 15 minutos.`
+      })
+    });
+    if (!response.ok) throw new Error(`Brevo recusou o envio (${response.status})`);
+    return true;
+  }
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM } = process.env;
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) { console.log(`[Lunarcord] Código de ${email}: ${code}`); return false; }
   const transport = nodemailer.createTransport({ host: SMTP_HOST, port: Number(SMTP_PORT || 587), secure: Number(SMTP_PORT) === 465, auth: { user: SMTP_USER, pass: SMTP_PASS } });
