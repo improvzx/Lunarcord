@@ -61,6 +61,13 @@ function addRemoteVideo(id, stream) {
   if (selectedOutputId && typeof video.setSinkId === 'function') video.setSinkId(selectedOutputId).catch(() => {});
 }
 
+$('#videos').addEventListener('dblclick', event => {
+  const card = event.target.closest('.video-card');
+  if (!card) return;
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  else card.requestFullscreen?.().catch(() => {});
+});
+
 function removePeer(id) { peers.get(id)?.close(); peers.delete(id); names.delete(id); document.getElementById(`peer-${id}`)?.remove(); renderPeople(); }
 function escapeHtml(v) { const d=document.createElement('div'); d.textContent=v; return d.innerHTML; }
 
