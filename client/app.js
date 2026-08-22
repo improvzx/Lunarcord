@@ -90,39 +90,29 @@ $('#screen').onclick = async () => {
   try {
     screenStream = await navigator.mediaDevices.getDisplayMedia({ video:true, audio:true });
     const track = screenStream.getVideoTracks()[0];
-peers.forEach((pc, id) => {
-  const sender = pc.getSenders().find(s => s.track?.kind === 'video');
-  if (sender && camera) {
-    sender.replaceTrack(camera).then(() => renegotiate(pc, id));
-  }
-});
-  }
-});
+    peers.forEach((pc, id) => {
+      const sender = pc.getSenders().find(item => item.track?.kind === 'video');
+      if (sender) {
+        sender.replaceTrack(track).then(() => renegotiate(pc, id));
+      } else {
+        pc.addTrack(track, screenStream);
+        renegotiate(pc, id);
+      }
+    });
     $('#local-video').srcObject=screenStream; $('#screen').classList.add('off'); $('#status').textContent='Compartilhando sua tela'; track.onended=stopScreen;
   } catch (error) {
     $('#status').textContent='O compartilhamento foi cancelado ou bloqueado pelo Windows';
     console.error('Erro ao compartilhar tela:', error);
   }
 };
-function stopScreen() {
-  if (!screenStream) return;
-
-  const camera = localStream.getVideoTracks()[0];
-
+function stopScreen(){
+  if(!screenStream)return;
+  const camera=localStream.getVideoTracks()[0];
   peers.forEach((pc, id) => {
-    const sender = pc.getSenders().find(s => s.track?.kind === 'video');
-
-    if (sender && camera) {
-      sender.replaceTrack(camera).then(() => renegotiate(pc, id));
-    }
+    const sender = pc.getSenders().find(item => item.track?.kind === 'video');
+    if (sender && camera) sender.replaceTrack(camera).then(() => renegotiate(pc, id));
   });
-
-  screenStream.getTracks().forEach(track => track.stop());
-  screenStream = null;
-  $('#local-video').srcObject = localStream;
-  $('#screen').classList.remove('off');
-  $('#status').textContent = 'Câmera e microfone ativos';
-}
+  screenStream.getTracks().forEach(t=>t.stop()); screenStream=null; $('#local-video').srcObject=localStream; $('#screen').classList.remove('off'); $('#status').textContent='Câmera e microfone ativos';
 }
 $('#chat-form').onsubmit=e=>{e.preventDefault();const text=$('#message').value.trim();if(text){socket.emit('chat-message',text);$('#message').value='';}};
 socket.on('chat-message',m=>{const d=document.createElement('div');d.className='msg';d.innerHTML=`<b>${escapeHtml(m.name)}</b><time>${new Date(m.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</time><p>${escapeHtml(m.text)}</p>`;$('#messages').appendChild(d);d.scrollIntoView();});
