@@ -55,7 +55,7 @@ function addRemoteVideo(id, stream) {
   let card = document.getElementById(`peer-${id}`);
   if (!card) {
     card = document.createElement('div'); card.id = `peer-${id}`; card.className = 'video-card';
-    card.innerHTML = `<video autoplay playsinline></video><span></span><button type="button" title="Tela cheia" style="position:absolute;top:10px;right:10px;z-index:5;width:42px;height:36px;border:0;border-radius:8px;background:#000b;color:#fff;font-size:21px;cursor:pointer">⛶</button>`;
+    card.innerHTML = `<video autoplay playsinline controls controlslist="nodownload noplaybackrate"></video><span></span><button type="button" title="Tela cheia" style="position:absolute;top:10px;right:10px;z-index:5;width:42px;height:36px;border:0;border-radius:8px;background:#000b;color:#fff;font-size:21px;cursor:pointer">⛶</button>`;
     card.querySelector('button').onclick = () => card.requestFullscreen?.().catch(() => {});
     $('#videos').appendChild(card);
   }
