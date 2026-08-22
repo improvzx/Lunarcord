@@ -55,7 +55,7 @@ function addRemoteVideo(id, stream) {
   let card = document.getElementById(`peer-${id}`);
   if (!card) {
     card = document.createElement('div'); card.id = `peer-${id}`; card.className = 'video-card';
-    card.innerHTML = `<video autoplay playsinline></video><span></span>`; $('#videos').appendChild(card);
+    card.innerHTML = `<video autoplay playsinline controls></video><span></span>`;
   }
   const video = card.querySelector('video'); video.srcObject = stream; card.querySelector('span').textContent = names.get(id) || 'Participante';
   if (selectedOutputId && typeof video.setSinkId === 'function') video.setSinkId(selectedOutputId).catch(() => {});
