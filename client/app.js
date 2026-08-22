@@ -89,7 +89,16 @@ $('#screen').onclick = async () => {
   if (screenStream) return stopScreen();
   try {
     screenStream = await navigator.mediaDevices.getDisplayMedia({ video:true, audio:true });
-    const track=screenStream.getVideoTracks()[0]; peers.forEach(pc=>pc.getSenders().find(s=>s.track?.kind==='video')?.replaceTrack(track));
+    const track = screenStream.getVideoTracks()[0];
+peers.forEach((pc, id) => {
+  const sender = pc.getSenders().find(s => s.track?.kind === 'video');
+  if (sender) {
+    sender.replaceTrack(track).then(() => renegotiate(pc, id));
+  } else {
+    pc.addTrack(track, screenStream);
+    renegotiate(pc, id);
+  }
+});
     $('#local-video').srcObject=screenStream; $('#screen').classList.add('off'); $('#status').textContent='Compartilhando sua tela'; track.onended=stopScreen;
   } catch (error) {
     $('#status').textContent='O compartilhamento foi cancelado ou bloqueado pelo Windows';
